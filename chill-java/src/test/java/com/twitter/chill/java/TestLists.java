@@ -17,9 +17,9 @@
 
 package com.twitter.chill.java;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.kryo5.Kryo;
+import com.esotericsoftware.kryo.kryo5.io.Input;
+import com.esotericsoftware.kryo.kryo5.io.Output;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -51,8 +51,9 @@ public class TestLists {
         ));
     }
 
-    public static <T> T serializeAndDeserialize(T t) {
+    public static <T> T serializeAndDeserialize(T t) throws ClassNotFoundException {
         Output output = new Output(1000, -1);
+        kryo.register(Class.forName("java.util.List"));
         kryo.writeClassAndObject(output, t);
         Input input = new Input(output.toBytes());
         return (T) kryo.readClassAndObject(input);
